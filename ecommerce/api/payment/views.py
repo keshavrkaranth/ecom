@@ -9,9 +9,9 @@ import braintree
 gateway = braintree.BraintreeGateway(
   braintree.Configuration(
     environment=braintree.Environment.Sandbox,
-    merchant_id='dqz5g3dgwgkvc8zd',
-    public_key='jncs8q5scmb7jw8y',
-    private_key='d2e4a6c093e7c1c4437c372e8c29af33'
+    merchant_id='2794rb78x8bg48pb',
+    public_key='mp67bdtxbymnyzbc',
+    private_key='26d196f9ad167138eee0c5f344056356'
   )
 )
 
@@ -37,21 +37,21 @@ def generate_token(request,id,token):
 def process_payment(request,id,token):
     if not validate_user_session(id,token):
         return JsonResponse({'error':'invalid session,Please login again'})
-    nonce_from_client = request.post['paymentMethodNonce']
-    amount_from_the_client = request.post['amoount']
+    nonce_from_client = request.POST['paymentMethodNonce']
+    amount_from_the_client = request.post['amount']
     result = gateway.transaction.sale(
         {
             "amount":amount_from_the_client,
             "payment_method_nonce":nonce_from_client,
-            'options':{
+            "options":{
                 "submit_for_settlement": True
             }
         }
     )
     if result.is_success:
         return JsonResponse({
-            "Sucess":result.is_success,
-            "trasaction":{
+            "sucess":result.is_success,
+            "transaction":{
                 'id':result.transaction.id,
                 'amount':result.transaction.amount
             }
